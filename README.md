@@ -325,8 +325,8 @@ MigrationHub/
 ### Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/MigrationHub-AWS-OnPrem.git
-cd MigrationHub-AWS-OnPrem
+git clone https://github.com/toastedjames/AWS-On-Prem-Migration-Control-Center.git
+cd AWS-On-Prem-Migration-Control-Center
 ```
 
 ### Create a virtual environment
