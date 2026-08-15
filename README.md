@@ -447,10 +447,6 @@ Potential future enhancements include:
 M.S. Electrical Engineering
 Virginia Tech
 
-GitHub: `YOUR_GITHUB_PROFILE`
-
-LinkedIn: `YOUR_LINKEDIN_PROFILE`
-
 ---
 
 ## License
