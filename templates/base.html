@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+        MigrationHub
+        {% endblock %}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="/static/css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="app-shell">
+
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside class="sidebar">
+
+
+        <!-- BRAND -->
+
+        <div class="logo">
+
+            <div class="logo-mark">
+                ⇄
+            </div>
+
+
+            <div>
+
+                <h1>
+                    MigrationHub
+                </h1>
+
+                <span>
+                    Infrastructure Transition
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- NAVIGATION LABEL -->
+
+        <div class="menu-label">
+            MIGRATION CENTER
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav>
+
+
+            <!-- =================================================
+                 DASHBOARD
+                 ================================================= -->
+
+            <a
+                href="/"
+                class="{% if request.url.path == '/' %}active{% endif %}"
+            >
+
+                <span>
+                    ▦
+                </span>
+
+                Dashboard
+
+            </a>
+
+
+            <!-- =================================================
+                 APPLICATIONS
+                 ================================================= -->
+
+            <a
+                href="/applications"
+                class="{% if request.url.path.startswith('/applications') %}active{% endif %}"
+            >
+
+                <span>
+                    ◈
+                </span>
+
+                Applications
+
+            </a>
+
+
+            <!-- =================================================
+                 MIGRATION PLANS
+                 ================================================= -->
+
+            <a
+                href="/plans"
+                class="{% if request.url.path == '/plans' %}active{% endif %}"
+            >
+
+                <span>
+                    ⇄
+                </span>
+
+                Migration Plans
+
+            </a>
+
+
+            <!-- =================================================
+                 VALIDATION
+                 ================================================= -->
+
+            <a
+                href="/validation"
+                class="{% if request.url.path == '/validation' %}active{% endif %}"
+            >
+
+                <span>
+                    ✓
+                </span>
+
+                Validation
+
+            </a>
+
+
+            <!-- =================================================
+                 REPORTS
+                 ================================================= -->
+
+            <a
+                href="/reports"
+                class="{% if request.url.path == '/reports' %}active{% endif %}"
+            >
+
+                <span>
+                    ▤
+                </span>
+
+                Reports
+
+            </a>
+
+
+        </nav>
+
+
+        <!-- =====================================================
+             SIDEBAR FOOTER
+             ===================================================== -->
+
+        <div class="sidebar-bottom">
+
+
+            <!-- =================================================
+                 ENVIRONMENT CARD
+                 ================================================= -->
+
+            <div class="environment-card">
+
+
+                <span>
+                    SOURCE
+                </span>
+
+
+                <strong>
+                    AWS
+                </strong>
+
+
+                <div class="arrow">
+                    ↓
+                </div>
+
+
+                <span>
+                    TARGET
+                </span>
+
+
+                <strong>
+                    ON-PREM
+                </strong>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 SYSTEM STATUS
+                 ================================================= -->
+
+            <div class="system-state">
+
+                <span class="online-dot"></span>
+
+                Migration Engine Online
+
+            </div>
+
+
+        </div>
+
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN APPLICATION
+         ===================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- =================================================
+             TOP BAR
+             ================================================= -->
+
+        <header class="topbar">
+
+
+            <div>
+
+
+                <span class="topbar-label">
+                    INFRASTRUCTURE TRANSITION
+                </span>
+
+
+                <h2>
+
+                    {% block page_title %}
+
+                    Migration Control Center
+
+                    {% endblock %}
+
+                </h2>
+
+
+            </div>
+
+
+            <!-- TOP RIGHT -->
+
+            <div class="topbar-right">
+
+
+                <span class="environment-badge">
+
+                    AWS → ON-PREM
+
+                </span>
+
+
+                <span class="date-badge">
+
+                    MIGRATION ENVIRONMENT
+
+                </span>
+
+
+            </div>
+
+
+        </header>
+
+
+        <!-- =================================================
+             PAGE CONTENT
+             ================================================= -->
+
+        <section class="content">
+
+
+            {% block content %}
+
+            {% endblock %}
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+     ===================================================== -->
+
+<script
+    src="/static/js/app.js">
+</script>
+
+
+</body>
+
+</html>

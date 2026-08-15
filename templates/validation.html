@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+MigrationHub — Validation
+{% endblock %}
+
+
+{% block page_title %}
+Migration Validation
+{% endblock %}
+
+
+{% block content %}
+
+
+<!-- =====================================================
+     PAGE INTRO
+     ===================================================== -->
+
+<div class="page-intro">
+
+    <div>
+
+        <h3>
+            Target Environment Validation
+        </h3>
+
+        <p>
+            Verify application compatibility and
+            migration readiness before cutover.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     VALIDATION PANEL
+     ===================================================== -->
+
+<div class="panel">
+
+
+    <div class="panel-header">
+
+
+        <div>
+
+            <h3>
+                Applications Awaiting Validation
+            </h3>
+
+            <p>
+                Select an application to execute its
+                migration validation checks.
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    {% if applications %}
+
+
+        <div class="validation-list">
+
+
+            {% for application in applications %}
+
+
+            <div class="validation-row">
+
+
+                <!-- APPLICATION -->
+
+                <div class="validation-application">
+
+                    <strong>
+                        {{ application.name }}
+                    </strong>
+
+                    <span>
+                        {{ application.aws_service }}
+                        →
+                        {{ application.target_environment }}
+                    </span>
+
+                </div>
+
+
+                <!-- READINESS -->
+
+                <div class="validation-readiness">
+
+                    <span>
+                        READINESS
+                    </span>
+
+                    <strong>
+                        {{ application.readiness_score|round|int }}%
+                    </strong>
+
+                </div>
+
+
+                <!-- VALIDATION BUTTON -->
+
+                <button
+                    class="validate-button"
+                    onclick="runValidation({{ application.id }}, event)"
+                >
+                    Run Validation
+                </button>
+
+
+            </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+    {% else %}
+
+
+        <div class="empty-state">
+
+            No applications available for validation.
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+{% endblock %}

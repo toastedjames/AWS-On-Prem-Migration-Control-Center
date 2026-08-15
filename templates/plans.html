@@ -1,0 +1,391 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+MigrationHub — Migration Plans
+{% endblock %}
+
+
+{% block page_title %}
+Migration Plans
+{% endblock %}
+
+
+{% block content %}
+
+
+<!-- =====================================================
+     PAGE INTRO
+     ===================================================== -->
+
+<div class="page-intro">
+
+    <div>
+
+        <h3>
+            Migration Planning
+        </h3>
+
+        <p>
+            Define migration strategies, ownership,
+            priorities, risks, and expected downtime.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MIGRATION PIPELINE
+     ===================================================== -->
+
+<div class="plan-pipeline">
+
+
+    <div class="pipeline-step active">
+
+        <span>
+            01
+        </span>
+
+        <strong>
+            ASSESS
+        </strong>
+
+    </div>
+
+
+    <div class="pipeline-line"></div>
+
+
+    <div class="pipeline-step active">
+
+        <span>
+            02
+        </span>
+
+        <strong>
+            PLAN
+        </strong>
+
+    </div>
+
+
+    <div class="pipeline-line"></div>
+
+
+    <div class="pipeline-step">
+
+        <span>
+            03
+        </span>
+
+        <strong>
+            MIGRATE
+        </strong>
+
+    </div>
+
+
+    <div class="pipeline-line"></div>
+
+
+    <div class="pipeline-step">
+
+        <span>
+            04
+        </span>
+
+        <strong>
+            VALIDATE
+        </strong>
+
+    </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     EXISTING PLANS
+     ===================================================== -->
+
+<div class="panel">
+
+
+    <div class="panel-header">
+
+
+        <div>
+
+            <h3>
+                Active Migration Plans
+            </h3>
+
+            <p>
+                Current migration strategies and
+                execution priorities.
+            </p>
+
+        </div>
+
+
+        <span class="plan-count">
+
+            {{ plans|length }} plans
+
+        </span>
+
+
+    </div>
+
+
+    {% if plans %}
+
+
+        <div class="plan-list">
+
+
+            {% for plan in plans %}
+
+
+            <div class="plan-row">
+
+
+                <!-- APPLICATION -->
+
+                <div class="plan-application">
+
+
+                    {% for application in applications %}
+
+
+                        {% if application.id == plan.application_id %}
+
+
+                            <strong>
+                                {{ application.name }}
+                            </strong>
+
+
+                        {% endif %}
+
+
+                    {% endfor %}
+
+
+                    <span>
+                        Plan #{{ plan.id }}
+                    </span>
+
+
+                </div>
+
+
+                <!-- STRATEGY -->
+
+                <div class="plan-field">
+
+                    <span>
+                        STRATEGY
+                    </span>
+
+                    <strong>
+                        {{ plan.strategy }}
+                    </strong>
+
+                </div>
+
+
+                <!-- PRIORITY -->
+
+                <div class="plan-field">
+
+                    <span>
+                        PRIORITY
+                    </span>
+
+                    <strong>
+                        {{ plan.priority }}
+                    </strong>
+
+                </div>
+
+
+                <!-- RISK -->
+
+                <div class="plan-field">
+
+                    <span>
+                        RISK
+                    </span>
+
+                    <strong
+                        class="risk-{{ plan.risk_level|lower }}"
+                    >
+                        {{ plan.risk_level }}
+                    </strong>
+
+                </div>
+
+
+                <!-- DOWNTIME -->
+
+                <div class="plan-field">
+
+                    <span>
+                        DOWNTIME
+                    </span>
+
+                    <strong>
+                        {{ plan.estimated_downtime }}
+                    </strong>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <span class="status planned">
+
+                    {{ plan.status }}
+
+                </span>
+
+
+            </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+    {% else %}
+
+
+        <div class="empty-state">
+
+
+            <strong>
+                No migration plans yet
+            </strong>
+
+
+            <p>
+                Create a migration plan from an
+                application assessment.
+            </p>
+
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+<!-- =====================================================
+     PLANNING GUIDANCE
+     ===================================================== -->
+
+<div class="planning-guidance">
+
+
+    <div class="guidance-card">
+
+        <span class="guidance-number">
+            01
+        </span>
+
+        <div>
+
+            <strong>
+                Assess
+            </strong>
+
+            <p>
+                Evaluate runtime, database,
+                dependencies, and infrastructure
+                compatibility.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="guidance-card">
+
+        <span class="guidance-number">
+            02
+        </span>
+
+        <div>
+
+            <strong>
+                Plan
+            </strong>
+
+            <p>
+                Define strategy, ownership,
+                risk, priority, and downtime.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="guidance-card">
+
+        <span class="guidance-number">
+            03
+        </span>
+
+        <div>
+
+            <strong>
+                Migrate
+            </strong>
+
+            <p>
+                Execute the migration according
+                to the approved plan.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="guidance-card">
+
+        <span class="guidance-number">
+            04
+        </span>
+
+        <div>
+
+            <strong>
+                Validate
+            </strong>
+
+            <p>
+                Confirm application health,
+                dependencies, and functionality.
+            </p>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}

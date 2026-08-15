@@ -1,0 +1,745 @@
+{% extends "base.html" %}
+
+{% block title %}
+MigrationHub — {{ application.name }}
+{% endblock %}
+
+
+{% block page_title %}
+Application Assessment
+{% endblock %}
+
+
+{% block content %}
+
+<!-- =====================================================
+     APPLICATION HEADER
+     ===================================================== -->
+
+<div class="detail-header">
+
+    <div>
+
+        <a
+            href="/applications"
+            class="back-link"
+        >
+            ← Application Inventory
+        </a>
+
+        <h3>
+            {{ application.name }}
+        </h3>
+
+        <p>
+            {{ application.description }}
+        </p>
+
+    </div>
+
+
+    <div class="detail-score">
+
+        <span>
+            MIGRATION READINESS
+        </span>
+
+        <strong>
+            {{ application.readiness_score|round|int }}%
+        </strong>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     APPLICATION PROFILE + ASSESSMENT
+     ===================================================== -->
+
+<div class="detail-grid">
+
+
+    <!-- APPLICATION PROFILE -->
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <h3>
+                Application Profile
+            </h3>
+
+        </div>
+
+
+        <div class="profile-grid">
+
+
+            <div>
+
+                <span>
+                    SOURCE
+                </span>
+
+                <strong>
+                    {{ application.source_environment }}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    TARGET
+                </span>
+
+                <strong>
+                    {{ application.target_environment }}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    AWS SERVICE
+                </span>
+
+                <strong>
+                    {{ application.aws_service }}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    RUNTIME
+                </span>
+
+                <strong>
+                    {{ application.runtime }}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    DATABASE
+                </span>
+
+                <strong>
+                    {{ application.database_type }}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    STATUS
+                </span>
+
+                <strong>
+                    {{ application.migration_status }}
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- READINESS ASSESSMENT -->
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <h3>
+                Readiness Assessment
+            </h3>
+
+        </div>
+
+
+        <div class="assessment-score">
+
+
+            <div class="score-circle">
+
+                <strong>
+                    {{ application.readiness_score|round|int }}%
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    CURRENT STATUS
+                </span>
+
+                <strong>
+                    {{ application.migration_status }}
+                </strong>
+
+                <p>
+                    Run a new assessment to evaluate
+                    migration compatibility.
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+        <button
+            class="primary-button"
+            onclick="runAssessment({{ application.id }})"
+        >
+            Run Migration Assessment
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     CREATE MIGRATION PLAN
+     ===================================================== -->
+
+<div class="panel section-panel">
+
+
+    <div class="panel-header">
+
+        <div>
+
+            <h3>
+                Create Migration Plan
+            </h3>
+
+            <p>
+                Define how this application will
+                transition to the on-premise environment.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <form
+        class="migration-form"
+        onsubmit="createMigrationPlan(event, {{ application.id }})"
+    >
+
+
+        <div class="form-grid">
+
+
+            <!-- STRATEGY -->
+
+            <div class="form-group">
+
+                <label>
+                    MIGRATION STRATEGY
+                </label>
+
+                <select
+                    id="strategy"
+                    required
+                >
+
+                    <option value="">
+                        Select strategy
+                    </option>
+
+                    <option value="REHOST">
+                        Rehost — Lift and Shift
+                    </option>
+
+                    <option value="REPLATFORM">
+                        Replatform — Minor Optimization
+                    </option>
+
+                    <option value="REFACTOR">
+                        Refactor — Architectural Changes
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- PRIORITY -->
+
+            <div class="form-group">
+
+                <label>
+                    PRIORITY
+                </label>
+
+                <select
+                    id="priority"
+                    required
+                >
+
+                    <option value="">
+                        Select priority
+                    </option>
+
+                    <option value="CRITICAL">
+                        Critical
+                    </option>
+
+                    <option value="HIGH">
+                        High
+                    </option>
+
+                    <option value="MEDIUM">
+                        Medium
+                    </option>
+
+                    <option value="LOW">
+                        Low
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- RISK -->
+
+            <div class="form-group">
+
+                <label>
+                    RISK LEVEL
+                </label>
+
+                <select
+                    id="risk_level"
+                    required
+                >
+
+                    <option value="">
+                        Select risk
+                    </option>
+
+                    <option value="LOW">
+                        Low
+                    </option>
+
+                    <option value="MEDIUM">
+                        Medium
+                    </option>
+
+                    <option value="HIGH">
+                        High
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- DOWNTIME -->
+
+            <div class="form-group">
+
+                <label>
+                    ESTIMATED DOWNTIME
+                </label>
+
+                <select
+                    id="estimated_downtime"
+                    required
+                >
+
+                    <option value="">
+                        Select downtime
+                    </option>
+
+                    <option value="None">
+                        None
+                    </option>
+
+                    <option value="< 15 minutes">
+                        &lt; 15 minutes
+                    </option>
+
+                    <option value="15-60 minutes">
+                        15–60 minutes
+                    </option>
+
+                    <option value="1-4 hours">
+                        1–4 hours
+                    </option>
+
+                    <option value="4+ hours">
+                        4+ hours
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- OWNER -->
+
+            <div class="form-group full-width">
+
+                <label>
+                    MIGRATION OWNER
+                </label>
+
+                <input
+                    id="owner"
+                    type="text"
+                    placeholder="e.g. Infrastructure Engineering"
+                    required
+                >
+
+            </div>
+
+
+            <!-- NOTES -->
+
+            <div class="form-group full-width">
+
+                <label>
+                    NOTES
+                </label>
+
+                <textarea
+                    id="notes"
+                    rows="4"
+                    placeholder="Migration considerations, dependencies, risks, or implementation notes..."
+                ></textarea>
+
+            </div>
+
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="primary-button"
+        >
+            Create Migration Plan
+        </button>
+
+
+    </form>
+
+</div>
+
+
+<!-- =====================================================
+     DEPENDENCIES
+     ===================================================== -->
+
+<div class="panel section-panel">
+
+
+    <div class="panel-header">
+
+        <div>
+
+            <h3>
+                Dependencies
+            </h3>
+
+            <p>
+                Application dependencies that must be
+                available in the target environment.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    {% if dependencies %}
+
+
+        <div class="dependency-list">
+
+
+            {% for dependency in dependencies %}
+
+
+            <div class="dependency-row">
+
+
+                <div>
+
+                    <strong>
+                        {{ dependency.name }}
+                    </strong>
+
+                    <span>
+                        {{ dependency.dependency_type }}
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        {{ dependency.source }}
+                    </span>
+
+                    <span class="arrow-small">
+                        →
+                    </span>
+
+                    <span>
+                        {{ dependency.target }}
+                    </span>
+
+                </div>
+
+
+                <span class="status planned">
+
+                    {{ dependency.status }}
+
+                </span>
+
+
+            </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+    {% else %}
+
+
+        <div class="empty-state">
+
+            No dependencies have been registered.
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+<!-- =====================================================
+     EXISTING MIGRATION PLANS
+     ===================================================== -->
+
+<div class="panel section-panel">
+
+
+    <div class="panel-header">
+
+        <div>
+
+            <h3>
+                Existing Migration Plans
+            </h3>
+
+            <p>
+                Plans currently associated with this application.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    {% if plans %}
+
+
+        <div class="plan-list">
+
+
+            {% for plan in plans %}
+
+
+            <div class="plan-row">
+
+
+                <div class="plan-field">
+
+                    <span>
+                        STRATEGY
+                    </span>
+
+                    <strong>
+                        {{ plan.strategy }}
+                    </strong>
+
+                </div>
+
+
+                <div class="plan-field">
+
+                    <span>
+                        PRIORITY
+                    </span>
+
+                    <strong>
+                        {{ plan.priority }}
+                    </strong>
+
+                </div>
+
+
+                <div class="plan-field">
+
+                    <span>
+                        RISK
+                    </span>
+
+                    <strong
+                        class="risk-{{ plan.risk_level|lower }}"
+                    >
+                        {{ plan.risk_level }}
+                    </strong>
+
+                </div>
+
+
+                <div class="plan-field">
+
+                    <span>
+                        DOWNTIME
+                    </span>
+
+                    <strong>
+                        {{ plan.estimated_downtime }}
+                    </strong>
+
+                </div>
+
+
+                <span class="status planned">
+
+                    {{ plan.status }}
+
+                </span>
+
+
+            </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+    {% else %}
+
+
+        <div class="empty-state">
+
+            No migration plans have been created
+            for this application.
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+<!-- =====================================================
+     MIGRATION ACTIVITY
+     ===================================================== -->
+
+<div class="panel section-panel">
+
+
+    <div class="panel-header">
+
+        <h3>
+            Migration Activity
+        </h3>
+
+    </div>
+
+
+    {% if events %}
+
+
+        {% for event in events %}
+
+
+        <div class="event-row">
+
+
+            <div class="event-marker"></div>
+
+
+            <div>
+
+                <strong>
+                    {{ event.event_type }}
+                </strong>
+
+                <p>
+                    {{ event.message }}
+                </p>
+
+            </div>
+
+
+            <span>
+                {{ event.status }}
+            </span>
+
+
+        </div>
+
+
+        {% endfor %}
+
+
+    {% else %}
+
+
+        <div class="empty-state">
+
+            No migration events recorded.
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+{% endblock %}

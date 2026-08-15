@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}
+MigrationHub — Applications
+{% endblock %}
+
+
+{% block page_title %}
+Application Inventory
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="page-intro">
+
+    <div>
+
+        <h3>
+            AWS Application Inventory
+        </h3>
+
+        <p>
+            Review applications currently being evaluated
+            for migration to the on-premise environment.
+        </p>
+
+    </div>
+
+</div>
+
+
+<div class="application-grid">
+
+    {% for application in applications %}
+
+    <a
+        href="/applications/{{ application.id }}"
+        class="application-card"
+    >
+
+        <div class="card-top">
+
+            <div class="application-symbol">
+                {{ loop.index }}
+            </div>
+
+            <span
+                class="status
+                {{ application.migration_status|lower }}"
+            >
+
+                {{ application.migration_status }}
+
+            </span>
+
+        </div>
+
+
+        <h3>
+            {{ application.name }}
+        </h3>
+
+
+        <p>
+            {{ application.description }}
+        </p>
+
+
+        <div class="application-meta">
+
+            <div>
+
+                <span>
+                    AWS SERVICE
+                </span>
+
+                <strong>
+                    {{ application.aws_service }}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    RUNTIME
+                </span>
+
+                <strong>
+                    {{ application.runtime }}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    DATABASE
+                </span>
+
+                <strong>
+                    {{ application.database_type }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-footer">
+
+            <span>
+                Migration readiness
+            </span>
+
+            <strong>
+                {{ application.readiness_score|round|int }}%
+            </strong>
+
+        </div>
+
+
+        <div class="progress">
+
+            <div
+                class="progress-fill"
+                style="width: {{ application.readiness_score }}%"
+            ></div>
+
+        </div>
+
+    </a>
+
+    {% endfor %}
+
+</div>
+
+
+{% endblock %}

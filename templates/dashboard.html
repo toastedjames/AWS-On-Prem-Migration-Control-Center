@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+
+{% block title %}
+MigrationHub — Dashboard
+{% endblock %}
+
+
+{% block page_title %}
+Migration Dashboard
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="page-intro">
+
+    <div>
+
+        <h3>
+            Migration Overview
+        </h3>
+
+        <p>
+            Track application readiness and progress
+            from AWS to the on-premise environment.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- SUMMARY -->
+
+<div class="summary-grid">
+
+
+    <div class="summary-card">
+
+        <span>
+            APPLICATIONS
+        </span>
+
+        <strong>
+            {{ total_applications }}
+        </strong>
+
+        <small>
+            In migration inventory
+        </small>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <span>
+            MIGRATION READY
+        </span>
+
+        <strong class="success">
+            {{ ready_applications }}
+        </strong>
+
+        <small>
+            Ready for transition
+        </small>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <span>
+            ASSESSMENT
+        </span>
+
+        <strong class="warning">
+            {{ assessment_applications }}
+        </strong>
+
+        <small>
+            Requires review
+        </small>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <span>
+            COMPLETED
+        </span>
+
+        <strong class="complete">
+            {{ migrated_applications }}
+        </strong>
+
+        <small>
+            Successfully migrated
+        </small>
+
+    </div>
+
+
+</div>
+
+
+<!-- APPLICATION TABLE -->
+
+<div class="panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <h3>
+                Application Migration Inventory
+            </h3>
+
+            <p>
+                Current migration readiness across
+                tracked applications.
+            </p>
+
+        </div>
+
+        <a
+            href="/applications"
+            class="text-link"
+        >
+            View inventory →
+        </a>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        APPLICATION
+                    </th>
+
+                    <th>
+                        AWS SERVICE
+                    </th>
+
+                    <th>
+                        RUNTIME
+                    </th>
+
+                    <th>
+                        READINESS
+                    </th>
+
+                    <th>
+                        STATUS
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for application in applications %}
+
+                <tr>
+
+                    <td>
+
+                        <a
+                            href="/applications/{{ application.id }}"
+                            class="application-name"
+                        >
+
+                            {{ application.name }}
+
+                        </a>
+
+                        <small>
+                            {{ application.database_type }}
+                        </small>
+
+                    </td>
+
+
+                    <td>
+                        {{ application.aws_service }}
+                    </td>
+
+
+                    <td>
+                        {{ application.runtime }}
+                    </td>
+
+
+                    <td>
+
+                        <div class="readiness">
+
+                            <div class="progress">
+
+                                <div
+                                    class="progress-fill"
+                                    style="width: {{ application.readiness_score }}%"
+                                ></div>
+
+                            </div>
+
+                            <span>
+                                {{ application.readiness_score|round|int }}%
+                            </span>
+
+                        </div>
+
+                    </td>
+
+
+                    <td>
+
+                        {% if application.migration_status == "READY" %}
+
+                            <span class="status ready">
+                                READY
+                            </span>
+
+                        {% elif application.migration_status == "COMPLETED" %}
+
+                            <span class="status completed">
+                                COMPLETED
+                            </span>
+
+                        {% elif application.migration_status == "ASSESSMENT" %}
+
+                            <span class="status assessment">
+                                ASSESSMENT
+                            </span>
+
+                        {% elif application.migration_status == "REVIEW_REQUIRED" %}
+
+                            <span class="status review">
+                                REVIEW
+                            </span>
+
+                        {% else %}
+
+                            <span class="status planned">
+                                PLANNED
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+{% endblock %}

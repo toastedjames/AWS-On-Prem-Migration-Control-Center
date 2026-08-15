@@ -1,0 +1,638 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+MigrationHub — Reports
+{% endblock %}
+
+
+{% block page_title %}
+Migration Reports
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="page-intro">
+
+    <div>
+
+        <h3>
+            Migration Program Analytics
+        </h3>
+
+        <p>
+            Executive overview of application readiness,
+            migration planning, risk, and validation.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     KPI CARDS
+     ===================================================== -->
+
+<div class="summary-grid">
+
+
+    <div class="summary-card">
+
+        <span>
+            APPLICATIONS
+        </span>
+
+        <strong>
+            {{ total_applications }}
+        </strong>
+
+        <small>
+            Applications in inventory
+        </small>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <span>
+            AVERAGE READINESS
+        </span>
+
+        <strong class="complete">
+            {{ average_readiness|round|int }}%
+        </strong>
+
+        <small>
+            Across all applications
+        </small>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <span>
+            MIGRATION READY
+        </span>
+
+        <strong class="success">
+            {{ ready_count }}
+        </strong>
+
+        <small>
+            Ready for transition
+        </small>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <span>
+            VALIDATION FAILURES
+        </span>
+
+        <strong class="warning">
+            {{ validation_failed }}
+        </strong>
+
+        <small>
+            Checks requiring attention
+        </small>
+
+    </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     ANALYTICS GRID
+     ===================================================== -->
+
+<div class="report-grid">
+
+
+    <!-- MIGRATION STATUS -->
+
+    <div class="panel">
+
+
+        <div class="panel-header">
+
+            <div>
+
+                <h3>
+                    Application Status
+                </h3>
+
+                <p>
+                    Current migration lifecycle position.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="analytics-list">
+
+
+            <div class="analytics-row">
+
+                <span>
+                    Ready
+                </span>
+
+                <strong>
+                    {{ ready_count }}
+                </strong>
+
+            </div>
+
+
+            <div class="analytics-row">
+
+                <span>
+                    Assessment
+                </span>
+
+                <strong>
+                    {{ assessment_count }}
+                </strong>
+
+            </div>
+
+
+            <div class="analytics-row">
+
+                <span>
+                    Review Required
+                </span>
+
+                <strong>
+                    {{ review_count }}
+                </strong>
+
+            </div>
+
+
+            <div class="analytics-row">
+
+                <span>
+                    Completed
+                </span>
+
+                <strong>
+                    {{ completed_count }}
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- STRATEGY -->
+
+    <div class="panel">
+
+
+        <div class="panel-header">
+
+            <div>
+
+                <h3>
+                    Migration Strategies
+                </h3>
+
+                <p>
+                    Distribution of planned migration approaches.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="analytics-list">
+
+
+            <div class="analytics-row">
+
+                <span>
+                    Rehost
+                </span>
+
+                <strong>
+                    {{ strategy_counts["REHOST"] }}
+                </strong>
+
+            </div>
+
+
+            <div class="analytics-row">
+
+                <span>
+                    Replatform
+                </span>
+
+                <strong>
+                    {{ strategy_counts["REPLATFORM"] }}
+                </strong>
+
+            </div>
+
+
+            <div class="analytics-row">
+
+                <span>
+                    Refactor
+                </span>
+
+                <strong>
+                    {{ strategy_counts["REFACTOR"] }}
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- RISK -->
+
+    <div class="panel">
+
+
+        <div class="panel-header">
+
+            <div>
+
+                <h3>
+                    Migration Risk
+                </h3>
+
+                <p>
+                    Risk distribution across migration plans.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="analytics-list">
+
+
+            <div class="analytics-row">
+
+                <span>
+                    Low Risk
+                </span>
+
+                <strong class="risk-low">
+                    {{ risk_counts["LOW"] }}
+                </strong>
+
+            </div>
+
+
+            <div class="analytics-row">
+
+                <span>
+                    Medium Risk
+                </span>
+
+                <strong class="risk-medium">
+                    {{ risk_counts["MEDIUM"] }}
+                </strong>
+
+            </div>
+
+
+            <div class="analytics-row">
+
+                <span>
+                    High Risk
+                </span>
+
+                <strong class="risk-high">
+                    {{ risk_counts["HIGH"] }}
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- VALIDATION -->
+
+    <div class="panel">
+
+
+        <div class="panel-header">
+
+            <div>
+
+                <h3>
+                    Validation Results
+                </h3>
+
+                <p>
+                    Results from target environment checks.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="analytics-list">
+
+
+            <div class="analytics-row">
+
+                <span>
+                    Passed
+                </span>
+
+                <strong class="risk-low">
+                    {{ validation_passed }}
+                </strong>
+
+            </div>
+
+
+            <div class="analytics-row">
+
+                <span>
+                    Warnings
+                </span>
+
+                <strong class="risk-medium">
+                    {{ validation_warnings }}
+                </strong>
+
+            </div>
+
+
+            <div class="analytics-row">
+
+                <span>
+                    Failed
+                </span>
+
+                <strong class="risk-high">
+                    {{ validation_failed }}
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     APPLICATION READINESS
+     ===================================================== -->
+
+<div class="panel section-panel">
+
+
+    <div class="panel-header">
+
+        <div>
+
+            <h3>
+                Application Readiness
+            </h3>
+
+            <p>
+                Readiness score across the migration portfolio.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="report-table-container">
+
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        APPLICATION
+                    </th>
+
+                    <th>
+                        SOURCE
+                    </th>
+
+                    <th>
+                        TARGET
+                    </th>
+
+                    <th>
+                        READINESS
+                    </th>
+
+                    <th>
+                        STATUS
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+                {% for application in applications %}
+
+
+                <tr>
+
+
+                    <td>
+
+                        <a
+                            href="/applications/{{ application.id }}"
+                            class="application-name"
+                        >
+                            {{ application.name }}
+                        </a>
+
+                    </td>
+
+
+                    <td>
+                        {{ application.source_environment }}
+                    </td>
+
+
+                    <td>
+                        {{ application.target_environment }}
+                    </td>
+
+
+                    <td>
+
+                        <div class="readiness">
+
+                            <div class="progress">
+
+                                <div
+                                    class="progress-fill"
+                                    style="width: {{ application.readiness_score }}%"
+                                ></div>
+
+                            </div>
+
+                            <span>
+                                {{ application.readiness_score|round|int }}%
+                            </span>
+
+                        </div>
+
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="status
+                            {% if application.migration_status == 'READY' %}
+                                ready
+                            {% elif application.migration_status == 'COMPLETED' %}
+                                completed
+                            {% elif application.migration_status == 'ASSESSMENT' %}
+                                assessment
+                            {% elif application.migration_status == 'REVIEW_REQUIRED' %}
+                                review
+                            {% else %}
+                                planned
+                            {% endif %}
+                            "
+                        >
+                            {{ application.migration_status }}
+                        </span>
+
+                    </td>
+
+
+                </tr>
+
+
+                {% endfor %}
+
+
+            </tbody>
+
+        </table>
+
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     RECENT ACTIVITY
+     ===================================================== -->
+
+<div class="panel section-panel">
+
+
+    <div class="panel-header">
+
+        <div>
+
+            <h3>
+                Recent Migration Activity
+            </h3>
+
+            <p>
+                Latest assessment, planning, and validation events.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    {% if events %}
+
+
+        {% for event in events %}
+
+
+        <div class="event-row">
+
+
+            <div class="event-marker"></div>
+
+
+            <div>
+
+                <strong>
+                    {{ event.event_type }}
+                </strong>
+
+                <p>
+                    {{ event.message }}
+                </p>
+
+            </div>
+
+
+            <span>
+                {{ event.status }}
+            </span>
+
+
+        </div>
+
+
+        {% endfor %}
+
+
+    {% else %}
+
+
+        <div class="empty-state">
+
+            No migration activity recorded yet.
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+{% endblock %}
